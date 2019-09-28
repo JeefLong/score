@@ -1,0 +1,138 @@
+<{include file="Admin/Public/header.html"}>
+<div class="main-container ace-save-state" id="main-container">
+    <script type="text/javascript">
+        try {
+            ace.settings.loadState('main-container')
+        } catch (e) {
+        }
+    </script>
+    <{include file="Admin/Public/left.html"}>
+    <div class="main-content">
+        <div class="main-content-inner">
+            <div class="breadcrumbs ace-save-state" id="breadcrumbs">
+                <ul class="breadcrumb">
+                    <li>
+                        <i class="ace-icon fa fa-home home-icon"></i>
+                        <a href="/Admin/Main/Index">首页</a>
+                    </li>
+                    <li>
+                        <a href="/Admin/Menu/ListMenu">菜单管理</a>
+                    </li>
+                    <li class="active">修改</li>
+                </ul><!-- /.breadcrumb -->
+                <!--
+                <div class="nav-search" id="nav-search">
+                    <form class="form-search" method="get">
+                        <span class="input-icon">
+                            <input type="text" placeholder="手机号或姓名[回车]" class="nav-search-input" name = "search_angent" id = "search_angent" />
+                            <i class="ace-icon fa fa-search nav-search-icon"></i>
+                        </span>
+                    </form>
+                </div> 
+                -->
+            </div>
+
+            <div class="page-content">
+                <{include file="Admin/Public/styletool.html"}> 
+                <div class="page-header">
+                    <h1>
+                        菜单管理
+                        <small>
+                            <i class="icon-double-angle-right"></i>
+                            修改
+                        </small>
+                    </h1>
+                </div><!-- /.page-header -->
+                <div class="row">
+
+                    <!-- PAGE CONTENT BEGINS -->
+
+                    <div class="row col-xs-12 col-sm-12 col-lg-12">
+
+                        <div class="table-responsive bounceInDown animated">
+                            <table id="sample-table-1" class="table table-striped table-bordered table-hover">
+
+                                <tr> <th>菜单名称</th>   <td><input type="text"  id="m_name" placeholder="菜单名称不能为空" value="<{$ret2.name}>" />       </td> </tr>
+                                <tr> <th>控制器名称</th> <td><input type="text" id="m_act" placeholder="Ctrl or Act 不能为空" value="<{$ret2.action}>" /> <b class="red">* 控制器或动作必须存在 </b>   </td>  </tr>
+                                <tr> <th>外链地址</th>   <td><input type="text" id="m_href" placeholder="http://+URL" value="<{$ret2.href}>" />        <b class="red">* 外链地址会覆盖控制器或动作 </b> </td>  </tr>
+                                <tr> <th>权限ID</th>     <td><input type="text" id="m_private" placeholder="权限的ID" value="<{$ret2.private}>" />        <b class="red">* 用户的权限值要比这个小才可以执行， <font class="green">FF</font> 是任何用户都能执行 </b>  </td>  </tr>
+                                <tr> <th>排列顺序</th>   <td><input type="text" id="m_order" placeholder="顺序" value = "<{$ret2.order}>" />        <b class="red">* 菜单的顺序 </b>  </td>  </tr>
+                                <tr> <th>子目录</th>    
+                                    <td>
+                                        <select id="m_pid">
+                                            <option value="0">根目录</option>
+                                            <{foreach from=$ret item=val key=key}>
+                                            <option value="<{$val.id}>" <{if $val.id == $ret2.pid}> selected = "selected" <{/if}> ><{$val.name}> </option>
+                                            <{/foreach}>
+                                        </select>
+                                    </td>  
+                                </tr>
+                                <tr> <th>是否显示</th>    
+                                    <td>
+                                        <input id="m_show" class="ace ace-switch ace-switch-4 btn-rotate" type="checkbox" <{if $ret2.show == 1}> checked = "checked" <{/if}> />
+                                               <span class="lbl"></span>
+                                    </td>  
+                                </tr>
+                                <tr> <td colspan = "3">
+                                        <button id="add_data" type="button" class="btn btn-purple btn-sm">
+                                            提交
+                                            <i class="icon-home icon-on-right bigger-110"></i>
+                                        </button>
+                                        <input type="hidden" id = "mid" value="<{$ret2.id}>" />
+                                    </td>
+                                </tr>
+                            </table>
+                        </div><!-- /.table-responsive -->
+                    </div><!-- /.row .col -->
+
+                    <!-- PAGE CONTENT ENDS -->
+
+                </div><!-- /.row -->
+            </div><!-- /.page-content -->
+        </div><!-- /.main-content-inner -->
+    </div> <!-- /.main-content -->
+    <!-- </div> /.main-container -->
+
+
+    <script type="text/javascript">
+        $('#add_data').click(function () {
+            var id = $('#mid').val();
+            var m_name = $('#m_name').val();
+            var m_act = $('#m_act').val();
+            var m_href = $('#m_href').val();
+            var m_private = $('#m_private').val();
+            var m_pid = $('#m_pid').val();
+            var m_order = $('#m_order').val();
+            var m_show = 0;
+            if ($('#m_show').is(':checked'))
+            {
+                m_show = 1;
+            }
+
+            $('#add_data').attr('disabled', 'disabled').addClass('disabled');
+            $.ajax({
+                type: 'POST',
+                url: '/Admin/Menu/AjaxModMenu',
+                async: false,
+                data: {'id': id, 'm_name': m_name, 'm_act': m_act, 'm_href': m_href, 'm_private': m_private, 'm_pid': m_pid, 'm_show': m_show, 'm_order': m_order, },
+                dataType: 'json',
+                success: function (json)
+                {
+                    alert(json.emsg);
+                    if (json.ecode == 200)
+                    {
+                        window.location.href = '/Admin/Menu/ListMenu';
+                    } else
+                    {
+                        $('#add_data').removeAttr('disabled').removeClass('disabled');
+                    }
+                },
+                error: function () {
+                    alert('添加失败!');
+                    $('#add_data').removeAttr('disabled').removeClass('disabled');
+                }
+            });
+        });
+
+    </script>
+    <{include file='Admin/Public/footer.html'}>

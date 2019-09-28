@@ -1,0 +1,142 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <meta name="viewport" content="width=device-width,height=device-height,inital-scale=1.0,maximum-scale=1.0,user-scalable=no;"/>
+        <title><{$smarty.const.WEBNAME}></title>
+        <meta name='keywords' content="游戏|麻将|牛牛|斗地主">
+        <meta name='description' content="游戏|麻将|牛牛|斗地主">
+        <link href="<{gsource css='../../css/regist.css'}>" type="text/css" rel="stylesheet">
+        <script language="javascript" src="<{gsource js='../../js/jquery-1.12.4.min.js'}>" type="text/javascript"></script>
+        <script language="javascript" src="<{gsource js='../../js/jquery.mobile.min.js'}>" type="text/javascript"></script>
+        <script language="javascript" src="<{gsource js='../../js/layer.js'}>"></script>
+        <script language="javascript" src="<{gsource js='../../js/base.js'}>"></script>
+    </head>
+    <body>
+
+        <div class="wrap-color" style="padding-bottom:0;">
+          <!--  <div class="head-mes">
+                <div class="clearfix totalmes"><p class="user-p"></p>
+                   <span class="ico-nav">导航</span>
+                </div>
+            </div> -->
+            <div class="loginBg">
+                <h3>管理注册</h3>
+                <form id="login_form" class="nc-login-form" method="post" action='/Agent/Login/AjaxLogin'>
+                    <p><span>账号：</span>
+                        <input name="username" id="username" placeholder="请输入登录名[建议手机号]" autocomplete="off" type="text" class="p-input" />
+                    </p>
+                    
+                    <p><span>密码：</span>
+                        <input name="password" id="password" placeholder="请输入请输入密码" autocomplete="off" type="text" class="p-input" />
+                    </p>
+                    
+                    <p><span>昵称：</span>
+                        <input name="nikename" id="nikename" placeholder="请输入姓名" autocomplete="off" type="text"  class="p-input" />
+                    </p>
+
+                    <p><span>手机：</span>
+                        <input name="usertel" id="usertel" placeholder="请输入手机号" autocomplete="off" type="text"  class="p-input" />
+                    </p>
+
+                    <input type="button" value="发送验证码" class="step-a" id="bt_send" />
+                    <p><span>验证码：</span>
+                        <input name="telcode" id="telcode" placeholder="请输入验证码" autocomplete="off" type="text"  class="p-input" />
+                    </p>
+
+                    <a href="javascript:void(0);" class="step-a" id="bt_reg">点击注册</a>
+                    <input type="hidden" id="trf_id" value="<{$trf_id}>" />
+                </form>
+            </div>
+        </div>
+
+        <script type="text/javascript">
+        $(function(){
+                    // 倒计时
+                    // layer.msg(data.emsg);
+                    var wait = 60;
+                            function time() {
+                            if (wait == 0) {
+                            $('#bt_send').removeAttr("disabled");
+                                    $('#bt_send').val("重新发送");
+                                    wait = 60;
+                            } else {
+                            //alert('rtrtr');
+                            $('#bt_send').attr("disabled", true);
+                                    $('#bt_send').val("重新发送(" + wait + ")");
+                                    wait--;
+                                    setTimeout(time, 1000);
+                            }
+                    }
+
+
+                    // 发送码        
+                    $('#bt_send').click(function(){
+
+                    //var username = $('#username').val();
+                    //var password = $('#password').val();
+                    var usertel = $('#usertel').val();
+                            $.ajax({
+                            type: 'POST',
+                                    url: '/Agent/Regist/Send',
+                                    data: {'usertel': usertel},
+                                    dataType: 'json',
+                                    success: function (json)
+                                    {
+                                    if (json.ecode == 200)
+                                    {
+                                     time();
+                                    }
+                                    else
+                                    {
+                                     layer.msg(json.emsg);
+                                    }
+                                    },
+                                      error: function (XMLHttpRequest, textStatus, errorThrown) {
+                                      alert('发送中......');
+                                    }
+                            }); //end ajax
+                    }); // end click
+
+
+                    // 注册      
+                    $('#bt_reg').click(function(){
+                    var username = $('#username').val();
+                    var password = $('#password').val();
+                    var usertel = $('#usertel').val();
+                    var telcode = $('#telcode').val();
+                    var nickname = $('#nikename').val();
+                    var trf_id = $('#trf_id').val();
+                    $.ajax({
+                    type: 'POST',
+                            url: '/Agent/Regist/AjaxReg',
+                            data: {'username':username, 'password':password, 'usertel': usertel, 'telcode':telcode, 'nickname':nickname, 'trf_id':trf_id },
+                            dataType: 'json',
+                            success: function (json)
+                            {
+                            if (json.ecode == 200)
+                            {
+                              alert('注册成功');
+                              window.location.href = json.url;
+                            }
+                            else
+                            {
+                              //alert(json.emsg);
+                              layer.msg(json.emsg);
+                            }
+                            },
+                            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                            alert('注册中......');
+                            }
+                    }); //end ajax
+            }); // end click                      
+
+
+         }); // end function
+
+        </script>
+        <div class="layer-bg2" style="z-index:108;"></div>
+    </body>
+</html>
+
+

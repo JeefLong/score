@@ -1,0 +1,346 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta http-equiv="Content-Language" content="zh-CN" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+
+        <title>代理管理中心</title>
+        <meta name="keywords" content="代理管理中心" />
+        <meta name="description" content="代理管理中心" />
+        <link rel="shortcut icon" href="<{gsource img='faviconie.ico'}>" type="image/x-icon" />
+        <link rel="bookmark" href="<{gsource img='faviconie.ico'}>" type="image/x-icon" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+        <!-- basic styles -->
+        <link href="<{gsource css='bootstrap.min.css'}>" rel="stylesheet" />
+        <link rel="stylesheet" href="<{gsource css='font-awesome.min.css'}>" />
+
+        <link rel="stylesheet" href="<{gsource css='ace.min.css'}>" />
+
+        <!--[if lte IE 9]>
+                <link rel="stylesheet" href="<{gsource css='ace-part2.min.css'}>" class="ace-main-stylesheet" />
+        <![endif]-->
+        <link rel="stylesheet" href="<{gsource css='ace-skins.min.css'}>" />
+        <link rel="stylesheet" href="<{gsource css='ace-rtl.min.css'}>" />
+
+        <!--[if lte IE 9]>
+          <link rel="stylesheet" href="<{gsource css='ace-ie.min.css'}>" />
+        <![endif]-->
+
+        <!-- inline styles related to this page -->
+
+        <!-- ace settings handler -->
+        <link rel="stylesheet" href="<{gsource css='animate.css'}>" />
+
+        <!-- HTML5shiv and Respond.js for IE8 to support HTML5 elements and media queries -->
+
+        <!--[if lt IE 8]>
+        <script src="<{gsource js='html5shiv.min.js'}>"></script>
+        <script src="<{gsource js='respond.min.js'}>"></script>
+        <![endif]-->
+
+        <!--[if !IE]> -->
+        <script type="text/javascript">
+            window.jQuery || document.write("<script src='<{gsource js='jquery-2.1.4.min.js'}>'>" + "<" + "script>");</script>
+        <!-- <![endif]-->
+        <!--[if IE]>
+        <script type="text/javascript">
+            window.jQuery || document.write("<script src='<{gsource js='jquery-1.11.3.min.js'}>'>"+"<"+"script>");
+        </script>
+        <![endif]-->
+
+        <script type="text/javascript">
+            if ('ontouchstart' in document.documentElement)
+                document.write("<script src='<{gsource js='jquery.mobile.custom.min.js'}>'>" + "<" + "/script>");</script>
+
+    </head>
+
+    <body class="login-layout">
+        <div class="main-container ace-save-state" id="main-container">
+            <script type="text/javascript">
+                try {
+                    ace.settings.loadState('main-container')
+                } catch (e) {
+                }
+            </script>
+
+            <div class="navbar navbar-default" id="navbar">
+                <script type="text/javascript">
+                    try {
+                        ace.settings.check('navbar', 'fixed')
+                    } catch (e) {
+                    }
+                </script>
+                <div class="navbar-container" id="navbar-container">
+                    <div class="navbar-header pull-left">
+                        <a href="#" class="navbar-brand">
+                            <small>
+                                <i class="ace-icon fa fa-coffee"></i>
+                                <b class="white-opaque">代理管理中心</b>
+                            </small>
+                        </a><!-- /.brand -->
+                    </div><!-- /.navbar-header -->
+                </div><!-- /.container -->
+            </div><!-- /.navbar-->
+
+            <div class="main-content">
+                <div class="row">
+                    <div class="login-container">
+                        <div class="center bounceInUp animated">
+                            <div class="space-30"></div>
+                            <div class="space-30"></div>
+                            <h1>
+                                <i class="ace-icon fa fa-android blue"></i>
+                                <span class="blue">Agent</span>
+                                <span class="blue" id="id-text2">Data Center</span>
+                            </h1>
+                            <h4 class="blue" id="id-company-text">&copy; 2016-2017</h4>
+                        </div>
+
+                        <div class="login-box visible widget-box no-border  bounceInDown animated">
+                            <div class="widget-main">
+                                <h4 class="header blue lighter bigger">
+                                    <i class="ace-icon fa fa-key green"></i>
+                                    <b class="green">代理注册</b>
+                                </h4>
+                                <div class="space-6"></div>
+                                <fieldset>
+                                    <label class="block clearfix">
+                                        <span> 用户名:</span>
+                                        <span class="block input-icon">
+                                            <input type="text" class="form-control" name="username" id="username" placeholder="用户名[建议手机号]" />
+                                            <i class="ace-icon fa fa-user blue"></i>
+                                        </span>
+                                        <span class="text-center"  id='user_msg'></span>
+                                    </label>
+
+                                    <label class="block clearfix">
+                                        <span> 手机号:</span>
+                                        <span class="block input-icon">
+                                            <input type="text" class="form-control" name="usermobile" id="usermobile" placeholder="联系手机号" />
+                                            <i class="ace-icon fa fa-user blue"></i>
+                                        </span>
+                                        <span class="text-center"  id='mobile_msg'></span>
+                                    </label>
+
+                                    <label class="block clearfix">
+                                        <span> 推荐人ID:</span>
+                                        <span class="block input-icon">
+                                            <input type="text" class="form-control" name="trf_id" id="trf_id" value = '<{$trf_id}>'  <{if $trf_id > 0}> readonly <{/if}>placeholder="推荐人ID" />
+                                                   <i class="ace-icon fa fa-user blue"></i>
+                                        </span>
+                                        <span class="text-center"  id='trf_msg'></span>
+                                    </label>
+
+
+                                    <label class="block clearfix">
+                                        <span> 登录密码:</span>
+                                        <span class="block input-icon">
+                                            <input type="password" class="form-control" name="password" id="password" placeholder="请输入密码" />
+                                            <i class="ace-icon fa fa-lock blue"></i>
+                                        </span>
+                                        <span class="text-center"  id='pass_msg'></span>
+                                    </label>
+
+                                    <label class="block clearfix">
+                                        <span> 确认密码:</span>
+                                        <span class="block input-icon">
+                                            <input type="password" class="form-control" name="re_password" id="re_password" placeholder="请确认密码" />
+                                            <i class="ace-icon fa fa-lock blue"></i>
+                                        </span>
+                                        <span class="text-center"  id='repass_msg'></span>
+                                    </label>                              
+
+                                    <label class="block clearfix">
+                                        <span> 昵称:</span>
+                                        <span class="block input-icon">
+                                            <input type="text" class="form-control" name="nickname" id="nickname" placeholder="昵称" />
+                                            <i class="ace-icon fa fa-user blue"></i>
+                                        </span>
+                                        <span class="text-center"  id='nick_msg'></span>
+                                    </label>
+
+                                    <{if $smarty.const.CODE}>
+                                    <label class="block clearfix">
+                                        <span> 验证码:</span>
+                                        <span class="block input-icon">
+                                            <input name="yzm" class="form-control" type="text" id="yzm" placeholder="请输入验证码" />
+                                            <i id="codestatu" class="ace-icon fa fa-key red"></i>
+                                        </span>
+                                        <span class="text-center"  id='error_msg_yzm'></span>
+                                    </label>
+
+                                    <label class="block clearfix">
+                                        <img src='/Agent/Login/Code' width=120 height=40 id="pic_yzm" />
+                                        <a class="a-red" href="javascript:;" id="reget"><b class="blue">换一张</b></a>
+                                    </label>
+                                    <{/if}>
+                                    <div class="space-1"></div>
+
+                                    <label class="block clearfix">
+                                        <button type="button"  id="btn_submit" class="width-35 pull-right btn btn-sm btn-primary">
+                                            <i class="icon-key"></i>
+                                            提&nbsp; &nbsp; &nbsp;交
+                                        </button>
+                                        <input type="hidden" id='iscode' value='<{$smarty.const.CODE}>' />
+                                    </label>
+                                    <div class="space-4"></div>
+                                </fieldset>
+                            </div> <!-- /widget-main -->
+                        </div> <!-- /login-box -->
+                    </div> <!-- login-container -->
+                </div> <!-- /.row -->
+            </div> <!--/.main-content-->
+        </div> <!-- /.main-container -->
+
+        <script type="text/javascript">
+            $(function () {
+                //repull
+                $('#reget').click(function (e)
+                {
+                    $('#pic_yzm').attr('src', '/Agent/Login/Code?id=' + Math.random());
+                    $('#codestatu').removeClass().addClass('ace-icon fa fa-key').addClass('red');
+                });
+                //key 13 check
+                $('#password').keypress(function (e) {
+                    if (e.keyCode == 13)
+                    {
+                        $('#btn_submit').click();
+                    }
+                });
+                $('#yzm').keypress(function (e) {
+                    if (e.keyCode == 13)
+                    {
+                        $('#btn_submit').click();
+                    }
+                });
+                $('#username').keypress(function (e) {
+                    if (e.keyCode == 13)
+                    {
+                        $('#btn_submit').click();
+                    }
+                }); //end keypress
+
+                //Code Check
+                $('#yzm').keyup(function (e) {
+                    var yzm = $.trim($('#yzm').val());
+                    if (yzm.length != 5)
+                    {
+                        $('#codestatu').removeClass().addClass('ace-icon fa fa-key').addClass('red');
+                        return false;
+                    }
+                    $.ajax({
+                        type: 'POST',
+                        url: '/Agent/Login/AjaxCheck',
+                        data: {'yzm': yzm},
+                        dataType: "json",
+                        success: function (json) {
+                            if (json.ecode == 200) {
+                                $('#codestatu').removeClass().addClass('ace-icon fa fa-key').addClass('blue');
+                                $('#error_msg_yzm').hide();
+                            }
+                            else {
+                                $('#codestatu').removeClass().addClass('ace-icon fa fa-key').addClass('red');
+                            }
+                        },
+                        failure: function () {
+                            alert('获取中......');
+                        },
+                        error: function (XMLHttpRequest, textStatus, errorThrown) {
+                            alert('获取中......');
+                        }
+                    }); //end ajax
+                });
+                //Dig by me 
+                $('#btn_submit').click(function ()
+                {
+                    var username = $.trim($('#username').val());
+                    var usermobile = $.trim($('#usermobile').val());
+                    var trf_id = $.trim($('#trf_id').val());
+
+                    var password = $.trim($('#password').val());
+                    var re_password = $.trim($('#re_password').val());
+                    var nickname = $.trim($('#nickname').val());
+
+                    var yzm = $.trim($('#yzm').val());
+                    var encode = $('#iscode').val();
+                    if (username.length < 3)
+                    {
+                        $('#user_msg').html('*请输入用户名').addClass('red');
+                        return false;
+                    }
+                    else
+                    {
+                        $('#user_msg').hide();
+                    }
+
+                    if (usermobile.length < 3)
+                    {
+                        $('#mobile_msg').html('*请输入联系方式').addClass('red');
+                        return false;
+                    }
+                    else
+                    {
+                        $('#mobile_msg').hide();
+                    }
+
+
+                    if (password.length < 2)
+                    {
+                        $('#pass_msg').html('*请输入密码').addClass('red');
+                        return false;
+                    }
+                    else
+                    {
+                        $('#pass_msg').hide();
+                    }
+
+                    if (re_password.length < 2)
+                    {
+                        $('#re_pass_msg').html('*请确认密码').addClass('red');
+                        return false;
+                    }
+                    else
+                    {
+                        $('#re_pass_msg').hide();
+                    }
+
+                    if (encode > 0 && (yzm.length < 4 || yzm.length > 6))
+                    {
+                        $('#error_msg_yzm').html('*请输入正确验证码').addClass('red');
+                        return false;
+                    }
+                    else
+                    {
+                        $("#error_msg_yzm").hide();
+                    }
+                    $('#btn_submit').attr('disabled', 'disabled').addClass('disabled');
+                    $.ajax({
+                        type: 'POST',
+                        url: '/Agent/Regist/AjaxReg',
+                        data: {'username': username, 'usermobile': usermobile, 'trf_id': trf_id, 'password': password, 're_password': re_password, 'nickname': nickname, 'yzm': yzm},
+                        dataType: 'json',
+                        success: function (json)
+                        {
+                            if (json.ecode == 200)
+                            {
+                                alert('注册成功!');
+                                window.location.href = json.url;
+                            }
+                            else
+                            {
+                                alert(json.emsg);
+                            }
+                            $('#btn_submit').removeAttr('disabled').removeClass('disabled');
+                        },
+                        error: function (XMLHttpRequest, textStatus, errorThrown) {
+                            alert('登陆中......');
+                        }
+                    }); //end ajax
+
+                }); //end submit
+            }); //end function
+
+        </script>
+    </body>  
+</html>

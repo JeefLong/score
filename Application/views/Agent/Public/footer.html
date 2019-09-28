@@ -1,0 +1,103 @@
+<!-- TO TOP -->
+<a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse">
+    <i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i>
+</a>
+<!-- /.TO TOP -->
+<div class="footer">
+    <div class="footer-inner">
+        <div class="footer-content">
+            <span class="bigger-120">
+                <span class="blue bolder"><{$smarty.const.WEBNAME}></span>
+                Application &copy; 2016-2017
+            </span>
+            &nbsp; &nbsp;
+            <span class="action-buttons">
+                <a href="#">
+                    <i class="ace-icon fa fa-twitter-square light-blue bigger-150"></i>
+                </a>
+
+                <a href="#">
+                    <i class="ace-icon fa fa-facebook-square text-primary bigger-150"></i>
+                </a>
+
+                <a href="#">
+                    <i class="ace-icon fa fa-rss-square orange bigger-150"></i>
+                </a>
+            </span>
+        </div>
+    </div>
+</div>
+</div><!-- /.main-container -->
+<script src="<{gsource js='bootstrap.min.js'}>"></script>
+<!-- page specific plugin scripts -->
+<!--[if lte IE 9]>
+  <script src="<{gsource js='excanvas.min.js'}>"></script>
+<![endif]-->
+<!-- ace scripts -->
+<script src="<{gsource js='ace-elements.min.js'}>"></script>
+<script src="<{gsource js='ace.min.js'}>"></script>
+<audio id="sound" autoplay="autoplay"></audio>
+<script>
+
+            function get_msg()
+            {
+            $.ajax({
+            type: 'POST',
+                    url: '/Agent/Login/CheckLogin',
+                    data: {'login_type': '1191'},
+                    dataType: "json",
+                    success: function (json) {
+                    if (json.ecode != 200)
+                            window.location.href = '/Agent/Login/Index';
+                    }
+            });
+                    $.ajax({
+                    type: 'POST',
+                            url: '/Agent/Message/AjaxGetMessage',
+                            data: {'uuid': '1091'},
+                            dataType: "json",
+                            success: function (json) {
+                            if (typeof (json.ecode) != "undefined"){
+                            return false;
+                            }
+                            var node = '';
+                                    var num = '';
+                                    $.each(json, function (i, o) {
+                                    num = o.count;
+                                            node += '<li>';
+                                            node += '<a href="/Agent/Message/ListMessage?mid=';
+                                            node += o.topic_id;
+                                            node += '" class="clearfix">';
+                                            node += '<img src="/Back/Assets/images/user.jpg" class="msg-photo icon-animated-vertical" alt="新信息" />';
+                                            node += '<span class="msg-body">';
+                                            node += '<span class="msg-title">';
+                                            node += '<span class="blue">';
+                                            node += o.send_name;
+                                            node += ' :</span>';
+                                            node += o.contend;
+                                            node += '</span>';
+                                            node += ' <span class="msg-time">';
+                                            node += ' <i class="ace-icon fa fa-clock-o"></i>';
+                                            node += ' <span>';
+                                            node += o.add_time;
+                                            node += '</span>';
+                                            node += ' </span>';
+                                            node += ' </span>';
+                                            node += ' </a>';
+                                            node += ' </li>';
+                                    });
+                                    if(num > 0)
+                                    {
+                                        $("#message_list").html(node);
+                                        $('#mssage_count1').html(num);
+                                        $('#mssage_count2').html(num);
+                                        $('#sound').attr('src', '/Plant/ring/new_message.mp3');
+                                   }
+                        }
+                    }); //end ajax
+            }
+    get_msg();
+            var requset3 = setInterval(get_msg, 30000);
+</script>
+</body>
+</html>

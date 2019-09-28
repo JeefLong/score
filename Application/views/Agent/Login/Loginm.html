@@ -1,0 +1,126 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title><{$smarty.const.WEBNAME}></title>
+        <meta name='keywords' content="电影|小说|电视剧|科幻|游戏">
+        <meta name='description' content="电影|小说|电视剧|科幻|游戏">
+        <link href="<{gsource css='../../css/loginm.css'}>" rel="stylesheet" type="text/css">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <script language="javascript" src="<{gsource js='../../js/jquery-1.12.4.min.js'}>" type="text/javascript"></script>
+        <script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+    </head>
+    <body>
+
+        <div class="app-cam">
+            <form>
+                <input type="text" id="username" placeholder="用户名" <{if isset($Uname)}> value='<{$Uname}>' <{/if}> />
+                <input type="password" id="password" placeholder="密码" />
+                <!-- 
+                <input type="text" id="yzm" placeholder="验证码" />
+                <div class="submit"> <input type="submit"  value="登录" /> </div>
+                -->
+               
+                <div class="clear"></div>
+                <div class="buttons" style="margin-top: 30px;">
+                    <ul>
+                        <li><a href="#" id="btn_submit" class="hvr-sweep-to-right">登&nbsp;录</a></li>
+                    </ul>
+                     <div style="color: #fff;">申请代理请联系群主</div>
+                </div>
+                <!-- <div class="new">
+                    <p><a href="#">申请代理</a></p>
+                    <p class="sign">New here ?<a href="#"> 登录</a></p>
+                    <div class="clear"></div>
+                </div>  -->
+                
+            </form>
+        </div>
+
+
+        <script type="text/javascript">
+            $(function () {
+
+                $('#password').keypress(function (e) {
+                    if (e.keyCode == 13)
+                    {
+                        $('#btn_submit').click();
+                    }
+                });
+                $('#yzm').keypress(function (e) {
+                    if (e.keyCode == 13)
+                    {
+                        $('#btn_submit').click();
+                    }
+                });
+                $('#username').keypress(function (e) {
+                    if (e.keyCode == 13)
+                    {
+                        $('#btn_submit').click();
+                    }
+                }); //end keypress
+
+
+                //Dig by me 
+                $('#btn_submit').click(function ()
+                {
+                    var userName = $.trim($('#username').val());
+                    var passWord = $.trim($('#password').val());
+                    var yzm = $.trim($('#yzm').val());
+                 
+                    $('#btn_submit').attr('disabled', 'disabled').addClass('disabled');
+
+                    $.ajax({
+                        type: 'POST',
+                        url: '/Agent/Login/AjaxLogin',
+                        data: {'username': userName, 'password': passWord, 'login': 1, 'yzm': yzm},
+                        dataType: 'json',
+                        success: function (json)
+                        {
+                            if (json.ecode == 200)
+                            {
+                                window.location.href = json.url;
+                            }
+                            else if (json.ecode == 401)
+                            {
+                                alert('*账号未审核完毕');
+                            }
+                            else if (json.ecode == 402)
+                            {
+                               alert('*账号已被暂停,请联系上级代理');
+                            }
+                            else if (json.ecode == 403)
+                            {
+                                alert('*账号已被冻结，请联系管理员');
+                            }
+                            else if (json.ecode == 404)
+                            {
+                                alert('*用户名或密码错误');
+                            }
+                            else if (json.ecode == 400)
+                            {
+                                alert('*输入验证码错误');
+                            }
+                            else if (json.ecode == 440)
+                            {
+                                alert('*IP被永久查封,必须联系站长');
+                            }
+                            else
+                            {
+                                window.location.href = '/Agent/Login/Main';
+                            }
+                            $('#btn_submit').removeAttr('disabled').removeClass('disabled');
+                        },
+                        error: function (XMLHttpRequest, textStatus, errorThrown) {
+                            alert('登陆中......');
+                            return false;
+                        }
+                    }); //end ajax
+
+                }); //end submit
+            }); //end function
+
+        </script>
+
+    </body>
+</html>

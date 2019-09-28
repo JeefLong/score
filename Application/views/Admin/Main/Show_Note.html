@@ -1,0 +1,166 @@
+<{include file="Admin/Public/header.html"}>
+<div class="main-container ace-save-state" id="main-container">
+    <script type="text/javascript">
+        try {
+            ace.settings.loadState('main-container')
+        } catch (e) {
+        }
+    </script>
+    <{include file="Admin/Public/left.html"}>
+    <div class="main-content">
+        <div class="main-content-inner">
+            <div class="breadcrumbs ace-save-state" id="breadcrumbs">
+                <ul class="breadcrumb">
+                    <li>
+                        <i class="ace-icon fa fa-home home-icon"></i>
+                        <a href="/Admin/Main/Index">首页</a>
+                    </li>
+
+                    <li>
+                        <a href="/Admin/Message/ListMessage">信息管理</a>
+                    </li>
+                    <li class="active">列表</li>
+                </ul><!-- /.breadcrumb -->
+                <!--
+                <div class="nav-search" id="nav-search">
+                    <form class="form-search" method="get">
+                        <span class="input-icon">
+                            <input type="text" placeholder="手机号或姓名[回车]" class="nav-search-input" name = "search_angent" id = "search_angent" />
+                            <i class="ace-icon fa fa-search nav-search-icon"></i>
+                        </span>
+                    </form>
+                </div> 
+                -->
+            </div>
+
+            <div class="page-content">
+                <{include file="Admin/Public/styletool.html"}> 
+                <div class="page-header">
+                    <h1>
+                        信息管理
+                        <small>
+                            <i class="icon-double-angle-right"></i>
+                            列表
+                            <i class="arrow fa fa-angle-right"></i>
+                            <a href='#myModal' data-toggle="modal" data-target="#myModal" onclick="get_data('<{$tid}>');"><span class="green">回复信息</span></a>
+                        </small>
+                    </h1>
+                </div><!-- /.page-header -->
+                <div class="row">
+
+                    <!-- PAGE CONTENT BEGINS -->
+
+                    <div class="col-xs-12 col-sm-12 col-lg-12">
+                        <div class="table-responsive fadeInDown animated">
+                            <table id="sample-table-1" class="table table-striped table-bordered table-hover">
+                                <thead>
+                                    <tr>
+                                        <th> 发送时间</th><th>发信人</th><th> 收信人</th><th>发送内容</th><th>状态</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <{foreach from=$list item=val key=key}>
+                                    <tr>
+                                        <td class="col-xs-2">
+                                            <b class="green"><{$val.add_time}></b> 
+                                        </td>
+                                        
+                                        <td class="col-xs-1">
+                                            <{if $val.send_id < 0}>  <b class ="blue"><{$val.send_name}></b><{else}><{$val.send_name}><{/if}>    
+                                        </td>
+                                        
+                                        <td class="col-xs-1">
+                                            <{if $val.recive_id < 0}>  <b class ="blue"><{$val.recive_name}></b><{else}><{$val.recive_name}><{/if}>    
+                                        </td>
+
+                                        <td class="col-xs-6">
+                                            <{$val.content}> 
+                                        </td>
+                                        
+                                        <td class="col-xs-2">
+                                           <{$val.recive_name}> : <{if $val.is_read == 1 }>[ <b class="green">已读</b>]<{else}>[<b class="red">未读</b>]<{/if}> 
+                                        </td>
+                                    </tr>                 
+                                    <{foreachelse}>
+                                    <tr> <td colspan="11" style="color: red"> 没找到信息! </td></tr>
+                                    <{/foreach}>
+                                </tbody>
+                            </table>
+
+                        </div><!-- /.table-responsive -->
+
+                        <!-- Sub Page -->
+                        <div class="row"><{$page}></div>
+                        <!-- /Sub Page -->
+                    </div><!-- /.col -->
+
+                    <!-- PAGE CONTENT ENDS -->
+                    <!-- -------------------------------------------------- 浮动窗口 ------------------------------- -->
+                    <!-- <button class="btn btn-primary" data-toggle="modal" data-target="#myModal">查看商品</button>  -->
+                    <!-- 窗口内容 -->
+                    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                    <h4 class="modal-title" id="myModalLabel">回复信息</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <table id="sample-table-1" class="table table-striped table-bordered table-hover">
+                                        <tr> <textarea id="content" cols="70" rows="10" placeholder="回复内容[限300字]"></textarea>  </tr>
+                                    </table>
+                                </div>
+                                <div class="modal-footer">
+                                    <input type = "hidden" id = "tid" />
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                                    <button type="button" class="btn btn-primary" id="sub_data">提交</button>
+                                </div>
+                            </div><!-- /.modal-content -->
+                        </div><!-- /.modal -->
+                    </div>
+                    <!-- /-------------------------------------------------- 浮动窗口 ------------------------------- -->
+
+
+                </div><!-- /.row -->
+            </div><!-- /.page-content -->
+        </div><!-- /.main-content-inner -->
+    </div> <!-- /.main-content -->
+    <!-- </div> /.main-container -->
+
+    <script type="text/javascript">
+        function get_data($tid)
+        {
+            $('#tid').val($tid);
+        }
+
+        $('#sub_data').click(function () {
+            var tid = $('#tid').val();
+            var content = $('#content').val();
+            $.ajax({
+                type: 'POST',
+                url: '/Admin/<{$Ctrl}>/AjaxSub<{$Ctrl}>',
+                async: false,
+                data: {'tid': tid, 'content': content, },
+                dataType: 'json',
+                success: function (json)
+                {
+                    if (json.ecode == 200)
+                    {
+                        $('.modal-body').html('<b class="green">操作成功！</b>');
+                        document.location.reload();
+                    }
+                    else
+                    {
+                        alert(json.emsg);
+                        $('#sub_data').removeAttr('disabled').removeClass('disabled');
+                    }
+                },
+                error: function () {
+                    $('.modal-body').html('<b class="red">数据加载失败！</b>');
+                    document.location.reload();
+                }
+            });
+        });
+
+    </script>
+    <{include file='Admin/Public/footer.html'}>

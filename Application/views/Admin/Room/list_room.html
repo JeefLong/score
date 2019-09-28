@@ -1,0 +1,328 @@
+<{include file="Admin/Public/header.html"}>
+<div class="main-container ace-save-state" id="main-container">
+    <script type="text/javascript">
+        try {
+            ace.settings.loadState('main-container')
+        } catch (e) {
+        }
+    </script>
+    <{include file="Admin/Public/left.html"}>
+    <div class="main-content">
+        <div class="main-content-inner">
+            <div class="breadcrumbs ace-save-state" id="breadcrumbs">
+                <ul class="breadcrumb">
+                    <li>
+                        <i class="ace-icon fa fa-home home-icon"></i>
+                        <a href="/Admin/Main/Index">首页</a>
+                    </li>
+
+                    <li>
+                        <a href="/Admin/Packet/ListRoom">查看房间</a>
+                    </li>
+                    <li class="active">列表</li>
+                </ul><!-- /.breadcrumb -->
+
+                <div class="nav-search" id="nav-search">
+                    <form class="form-search" method="get">
+                        <span class="input-icon">
+                            <input type="text" placeholder="房间ID[回车]" class="nav-search-input" name = "search_data" id = "search_data" />
+                            <i class="ace-icon fa fa-search nav-search-icon"></i>
+                        </span>
+                    </form>
+                </div><!-- /.nav-search -->
+            </div>
+
+            <div class="page-content">
+                <{include file="Admin/Public/styletool.html"}> 
+                <div class="page-header">
+                    <h1>
+                        查看房间
+                        <small>
+                            <i class="icon-double-angle-right"></i>
+                            列表
+                            <i class="arrow fa fa-angle-right"></i>
+                           
+                        </small>
+                    </h1>
+                </div><!-- /.page-header -->
+                <div class="row">
+
+                    <!-- PAGE CONTENT BEGINS -->
+
+                    <div class="col-xs-12 col-sm-12 col-lg-12">
+                        <div class="table-responsive fadeInDown animated">
+                            <table id="sample-table-1" class="table table-striped table-bordered table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            <label class="position-relative">
+                                                <input type="checkbox" id ="check_all" class="ace" />
+                                                <span class="lbl"></span>
+                                            </label>
+                                        </th>
+                                        <th>UUID</th>
+                                        <th>TYPE</th>
+                                        <th>ROOM</th>
+                                        <th>玩家(1)</th>
+                                        <th>玩家(2)</th>
+                                        <th>玩家(3)</th>
+                                        <th>玩家(4)</th>
+                                        <th>玩家(5)</th>
+                                        <th>创建时间</th>
+                                     </tr>
+                                </thead>
+
+                                <tbody>
+                                    <{foreach from=$list item=val key=key}>
+                                    <tr>
+                                        <td>
+                                            <label class="position-relative">
+                                                <input type="checkbox" class="ace" name="check_pro" value = "<{$val.id}>" />
+                                                <span class="lbl"></span>
+                                            </label>
+                                        </td>
+                                        <td><{$val.uuid}></td>
+                                        <td><{$val.type}></td>
+                                        <td><{$val.id}></td>
+                                        <td> <a href='#myModal' data-toggle="modal" data-target="#myModal" onclick="get_data('<{$val.user_id0}>');"><{$val.user_name0|base64_decode|truncate:7}></a></td>
+                                        <td> <a href='#myModal' data-toggle="modal" data-target="#myModal" onclick="get_data('<{$val.user_id1}>');"><{$val.user_name1|base64_decode|truncate:7}></a></td>
+                                        <td> <a href='#myModal' data-toggle="modal" data-target="#myModal" onclick="get_data('<{$val.user_id2}>');"><{$val.user_name2|base64_decode|truncate:7}></a></td>
+                                        <td> <a href='#myModal' data-toggle="modal" data-target="#myModal" onclick="get_data('<{$val.user_id3}>');"><{$val.user_name3|base64_decode|truncate:7}></a></td>
+                                        <td> <a href='#myModal' data-toggle="modal" data-target="#myModal" onclick="get_data('<{$val.user_id4}>');"><{$val.user_name4|base64_decode|truncate:7}></a></td>
+
+                                        <td><{$val.create_time|date_format:'Y-m-d H:i:s'}></td>
+                                    </tr>
+                                    <{foreachelse}>
+                                    <tr>
+                                        <td colspan="9" style="color: red"> 没找到信息! </td>
+                                    </tr>
+                                    <{/foreach}>
+                                    <tr>
+                                        <td colspan = "10"> 
+                                            <button class="btn btn-purple btn-sm" type="button" onclick="del();">
+                                                删除
+                                                <i class="icon-cog icon-on-right bigger-110"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div><!-- /.table-responsive -->
+
+                        <!-- Sub Page -->
+                        <div class="row"><{$page}></div>
+                        <!-- /.Sub Page -->
+
+                    </div><!-- /.row .col -->
+
+                    <!-- PAGE CONTENT ENDS -->
+                    <!-- -------------------------------------------------- 浮动窗口 ------------------------------- -->
+                    <!-- <button class="btn btn-primary" data-toggle="modal" data-target="#myModal">查看商品</button>  -->
+                    <!-- 窗口内容 -->
+                    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                    <h4 class="modal-title" id="myModalLabel">数据信息</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <table id="sample-table-1" class="table table-striped table-bordered table-hover">
+                                        <tr>
+                                            <td>头像</td> 
+                                            <td>
+                                                <img style ="width:100px; height:100px;" class="nav-user-photo img-circle"  id = "pl_img" alt="暂无头像" />    
+                                            </td>
+                                        </tr>
+
+                                        <tr> 
+                                            <td>ID</td>   
+                                            <td><input type="text" readonly   id="pl_id" />   </td> 
+                                        </tr>
+
+                                        <tr> 
+                                            <td>登录ID</td>
+                                            <td><input type="text"  id="pl_account" readonly />  </td> 
+                                        </tr>
+
+                                        <tr> 
+                                            <td>性别</td>
+                                            <td>
+                                                <select id="pl_sex" disabled = "disabled">
+                                                    <option value = "0">保密</option>
+                                                    <option value = "1">男</option>
+                                                    <option value = "2">女</option>
+                                                </select>
+                                            </td> 
+                                        </tr>
+
+                                        <tr> 
+                                            <td>微信昵称</td>
+                                            <td><input type="text" id="pl_name" readonly />     </td>  
+                                        </tr>
+
+                                        <tr>
+                                            <td>房卡数量</td>  
+                                            <td><input type="text" id="pl_gold" readonly />     </td>  
+                                        </tr>
+                                        <{if $smarty.session._admin_user.uname == 'admin' || $smarty.session._admin_user.roleid < 1}>
+                                        <tr>
+                                            <td>是否换牌</td>  
+                                            <td>
+                                                <input id="pl_chg" class="ace ace-switch ace-switch-4 btn-rotate" type="checkbox" />
+                                                <span class="lbl"></span>
+                                            </td>  
+                                        </tr>
+                                        <{/if}>
+                                        <tr>
+                                            <td>金币数量</td>  
+                                            <td><input type="text" id="pl_coins" readonly />    </td>  
+                                        </tr>
+
+                                    </table>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                                    <button type="button" class="btn btn-primary" id="sub_data">提交</button>
+                                </div>
+                            </div><!-- /.modal-content -->
+                        </div><!-- /.modal -->
+                    </div>
+                    <!-- /-------------------------------------------------- 浮动窗口 ------------------------------- -->
+                </div><!-- /.row -->
+            </div><!-- /.page-content -->
+        </div><!-- /.main-content-inner -->
+    </div> <!-- /.main-content -->
+    <!-- </div> /.main-container -->
+
+    <link rel="stylesheet" href="<{asource css='bootstrap-datetimepicker.min.css'}>" />
+    <script src="<{asource js='date-time/moment.min.js'}>"></script>
+    <script src="<{asource js='date-time/bootstrap-datetimepicker.min.js'}>"></script>
+
+    <script type="text/javascript">
+                                                        $('#check_all').click(function () {
+                                                    $('[name=check_pro]:checkbox').each(function () {
+                                                        this.checked = !this.checked;
+                                                    });
+                                                });
+
+                                                function del()
+                                                {
+                                                    var data = '';
+                                                    var inputs = document.getElementsByName('check_pro');
+                                                    for (var i = 0; i < inputs.length; i++)
+                                                    {
+                                                        if (inputs[i].checked)
+                                                        {
+                                                            data = data + ',' + inputs[i].value;
+                                                        }
+                                                    }
+
+                                                    data = data.substr(1);
+
+                                                    if (data.length < 1)
+                                                    {
+                                                        alert('请选择要删除的数据');
+                                                        return false;
+                                                    }
+
+                                                    if (!confirm('确认要删除吗？'))
+                                                    {
+                                                        return false;
+                                                    }
+
+                                                    $.ajax({
+                                                        url: '/Admin/Room/AjaxDelRoom',
+                                                        type: 'POST',
+                                                        data: {'ids': data, },
+                                                        dataType: 'json',
+                                                        success: function (json) {
+                                                            alert(json.emsg);
+                                                            if (json.ecode == 200)
+                                                            {
+                                                                location.reload();
+                                                            }
+                                                        }
+                                                    });
+                                                }
+
+                                                function get_data(id)
+                                                {
+                                                    $('#id').val(id);
+                                                    $.ajax({
+                                                        url: '/Admin/User/SubUser',
+                                                        type: 'POST',
+                                                        data: {'id': id},
+                                                        dataType: 'json',
+                                                        success: function (json) {
+                                                            if (typeof json.ecode != 'undefined')
+                                                            {
+                                                                $('.modal-body').html(json.emsg);
+                                                                location.reload();
+                                                            }
+                                                            $('#pl_id').val(json.userid);
+                                                            $('#pl_account').val(json.account);
+                                                            $('#pl_img').attr('src', json.headimg);
+                                                            $('#pl_sex').val(json.sex);
+                                                            $('#pl_name').val(json.uname);
+                                                            $('#pl_gold').val(json.gems);
+                                                            if (json.lv == 2)
+                                                            {
+                                                                $('#pl_chg').prop("checked", true);
+                                                            }
+                                                            else
+                                                            {
+                                                                $('#pl_chg').prop("checked", false);
+                                                            }
+                                                            $('#pl_coins').val(json.coins);
+                                                        },
+                                                        error: function () {
+                                                            alert('获取失败!');
+                                                            location.reload();
+                                                        }
+                                                    });
+                                                }
+
+                                                $('#sub_data').click(function () {
+                                                    var pl_id = $('#pl_id').val();
+                                                    var pl_account = $('#pl_account').val();
+                                                    var pl_name = $('#pl_name').val();
+                                                    var pl_sex = $('#pl_sex').val();
+                                                    var pl_gold = $('#pl_gold').val();
+                                                    var pl_coins = $('#pl_coins').val();
+                                                    var pl_chg = 1;
+                                                    if ($('#pl_chg').is(':checked'))
+                                                    {
+                                                        pl_chg = 2;
+                                                    }
+
+                                                    $('#sub_data').attr('disabled', 'disabled').addClass('disabled');
+                                                    $.ajax({
+                                                        type: 'POST',
+                                                        url: '/Admin/User/AjaxSubUser',
+                                                        async: false,
+                                                        data: {'pl_id': pl_id, 'pl_account': pl_account, 'pl_name': pl_name, 'pl_sex': pl_sex, 'pl_gold': pl_gold, 'pl_chg': pl_chg, 'pl_coins': pl_coins},
+                                                        dataType: 'json',
+                                                        success: function (json)
+                                                        {
+                                                            if (json.ecode == 200)
+                                                            {
+                                                                $('.modal-body').html('<b class="green">操作成功!</b>');
+                                                                document.location.reload();
+                                                            }
+                                                            else
+                                                            {
+                                                                $('.modal-body').html('<b class="red">' + json.emsg + '!</b>');
+                                                                document.location.reload();
+                                                            }
+                                                        },
+                                                        error: function () {
+                                                            $('.modal-body').html('<b class="red">数据加载失败!</b>');
+                                                            document.location.reload();
+                                                        }
+                                                    });
+                                                });
+
+    </script>
+
+    <{include file='Admin/Public/footer.html'}>

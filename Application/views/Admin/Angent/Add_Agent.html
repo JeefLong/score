@@ -1,0 +1,125 @@
+<{include file="Admin/Public/header.html"}>
+<div class="main-container ace-save-state" id="main-container">
+    <script type="text/javascript">
+        try {
+            ace.settings.loadState('main-container')
+        } catch (e) {
+        }
+    </script>
+    <{include file="Admin/Public/left.html"}>
+    <div class="main-content">
+        <div class="main-content-inner">
+            <div class="breadcrumbs ace-save-state" id="breadcrumbs">
+                <ul class="breadcrumb">
+                    <li>
+                        <i class="ace-icon fa fa-home home-icon"></i>
+                        <a href="/Admin/Main/Index">首页</a>
+                    </li>
+
+                    <li>
+                        <a href="/Admin/<{$Ctrl}>/List<{$Ctrl}>">修改信息</a>
+                    </li>
+                    <li class="active">修改</li>
+                </ul><!-- /.breadcrumb -->
+                <!--
+                <div class="nav-search" id="nav-search">
+                    <form class="form-search" method="get">
+                        <span class="input-icon">
+                            <input type="text" placeholder="手机号或姓名[回车]" class="nav-search-input" name = "search_angent" id = "search_angent" />
+                            <i class="ace-icon fa fa-search nav-search-icon"></i>
+                        </span>
+                    </form>
+                </div> 
+                -->
+            </div>
+
+            <div class="page-content">
+                <{include file="Admin/Public/styletool.html"}> 
+                <div class="page-header">
+                    <h1>
+                        修改信息
+                        <small>
+                            <i class="icon-double-angle-right"></i>
+                            修改
+                        </small>
+                    </h1>
+                </div><!-- /.page-header -->
+
+                <div class="row">
+
+                    <!-- PAGE CONTENT BEGINS -->
+
+                    <div class="row col-xs-12 col-sm-12 col-lg-12">
+
+                        <div class="table-responsive fadeInDown animated">
+                            <table id="sample-table-1" class="table table-striped table-bordered table-hover">                           
+                                <tr> <th>推广地址</th>   <td><input type="text" class="form-control"  id="agt_rname"    value="<{$url}>" />     </td> </tr>
+                                <tr> <th>推广二维码</th>
+                                    <td>
+                                        <img src="/Admin/Angent/GetImg" style="width:150px; height:150px;" />
+                                        
+                                    </td> 
+                                </tr>
+                                <tr> <th>推广方法</th>   <td><b class="red">复制您的推广地址，或二维码(二选一即可)，发送给代理注册即可！</b></td> </tr>
+                                <!--   <tr> <td colspan = "3">
+                                       <button id="mod_data" type="button" class="btn btn-purple btn-sm">
+                                             提交
+                                             <i class="icon-home icon-on-right bigger-110"></i>
+                                         </button>
+                                     </td>
+                                 </tr> -->
+                            </table>
+                        </div><!-- /.table-responsive -->
+                    </div><!-- /.row .col -->
+
+                    <!-- PAGE CONTENT ENDS -->
+
+                </div><!-- /.row -->
+            </div><!-- /.page-content -->
+        </div><!-- /.main-content-inner -->
+    </div> <!-- /.main-content -->
+    <!-- </div> /.main-container -->
+
+    <!-- 日历控件 -->
+    <link rel="stylesheet" href="<{asource css='bootstrap-datetimepicker.min.css'}>" />
+    <script src="<{asource js='date-time/moment.min.js'}>"></script>
+    <script src="<{asource js='date-time/bootstrap-datetimepicker.min.js'}>"></script>
+
+    <script type="text/javascript">
+                $('#mod_data').click(function () {
+            var agt_id = $('#agt_id').val();
+            var agt_name = $('#agt_name').val();
+            var agt_pass = $('#agt_pass').val();
+            var agt_rname = $('#agt_rname').val();
+
+            $('#mod_data').attr('disabled', 'disabled').addClass('disabled');
+            $.ajax({
+                type: 'POST',
+                url: '/Agent/Manage/AjaxSubAgent',
+                async: false,
+                data: {'agt_id': agt_id, 'agt_name': agt_name, 'agt_pass': agt_pass, 'agt_rname': agt_rname},
+                dataType: 'json',
+                success: function (json)
+                {
+                    alert(json.emsg);
+                    if (json.ecode == 200)
+                    {
+                        history.go(-1);
+                    }
+                },
+                error: function () {
+                    alert('修改失败!');
+                }
+            });
+            $('#mod_data').removeAttr('disabled').removeClass('disabled');
+        });
+
+        $('#ad_lock').datetimepicker({
+            format: 'yyyy-mm-dd hh:ii',
+            // pickDate: false,
+            // startView: 1,
+        }).on('changeDate', function () {
+            $(this).datetimepicker('hide');
+        });
+    </script>
+    <{include file='Admin/Public/footer.html'}>

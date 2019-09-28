@@ -1,0 +1,125 @@
+<{include file="Agent/Public/header.html"}>
+<div class="main-container ace-save-state" id="main-container">
+    <script type="text/javascript">
+        try {
+            ace.settings.loadState('main-container')
+        } catch (e) {
+        }
+    </script>
+    <{include file="Agent/Public/left.html"}>
+    <div class="main-content">
+        <div class="main-content-inner">
+            <div class="breadcrumbs ace-save-state" id="breadcrumbs">
+                <ul class="breadcrumb">
+                    <li>
+                        <i class="ace-icon fa fa-home home-icon"></i>
+                        <a href="/Agent/Angent/Index">首页</a>
+                    </li>
+
+                    <li>
+                        <a href="/Agent/<{$Ctrl}>/Player<{$Ctrl}>">玩家充值</a>
+                    </li>
+                    <li class="active">查看</li>
+                </ul><!-- /.breadcrumb -->
+            </div>
+
+            <div class="page-content">
+                <{include file="Agent/Public/styletool.html"}> 
+                <div class="page-header">
+                    <h1>
+                        玩家充值
+                        <small>
+                            <i class="icon-double-angle-right"></i>
+                            查看
+                        </small>
+                    </h1>
+                </div><!-- /.page-header -->
+                <div class="row">
+                    <div class="row col-xs-12 col-sm-12 col-lg-12">
+                        <div class="table-responsive fadeInDown animated">
+                            <table id="sample-table-1" class="table table-striped table-bordered table-hover">
+
+                                <tr> <th>玩家ID</th>
+                                    <td>
+                                        <input type="text"  placeholder="被充值的玩家ID【必填】" id="dest_id" name="dest_id" /> 
+
+                                    </td>
+                                </tr>
+
+                                <tr> <th>充值数量</th>
+                                    <td>
+                                        <input type="text"  placeholder="冲入房卡数【必填】" id="charge_gold" name="charge_gold" /> 
+
+                                    </td>
+                                </tr>
+
+                                <tr> <th>当前房卡数</th>
+                                    <td>
+                                        <input type="text" id="rest_gold" name="rest_gold" value ="<{$rest_gold}>" disabled="disabled" /> 
+
+                                    </td>
+                                </tr>
+
+<!--                                <tr> <th>支付密码</th>
+                                    <td>
+                                        <input type="password" id="charge_pass" name="charge_pass" placeholder="支付密码【必填】"  /> 
+                                    </td>
+                                </tr>-->
+
+
+                                <tr> <th>充值备注</th>
+                                    <td>
+                                        <input type="text"  placeholder="充值备注" id="charge_desc" name="charge_desc" /> 
+
+                                    </td>
+                                </tr>
+
+                                <tr> <td colspan = "3">
+                                        <button id="add_data" type="button" class="btn btn-purple btn-sm">
+                                            提交
+                                            <i class="icon-home icon-on-right bigger-110"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div><!-- /.table-responsive -->
+                    </div><!-- /.row .col -->
+
+                    <!-- PAGE CONTENT ENDS -->
+
+                </div><!-- /.row -->
+            </div><!-- /.page-content -->
+        </div><!-- /.main-content-inner -->
+    </div> <!-- /.main-content -->
+    <!-- </div> /.main-container -->
+
+    <script type="text/javascript">
+        $('#add_data').click(function () {
+            
+          //  $('#add_data').attr('disabled', 'disabled').addClass('disabled');
+            var dest_id = $('#dest_id').val();
+            var charge_gold = $('#charge_gold').val();
+            var charge_desc = $('#charge_desc').val();
+            var charge_pass = $('#charge_pass').val();
+            $.ajax({
+                type: 'POST',
+                url: '/Agent/Charge/AjaxPlayerCharge',
+                async: false,
+                data: {'dest_id': dest_id, 'charge_gold': charge_gold, 'charge_pass': charge_pass, 'charge_desc': charge_desc},
+                dataType: 'json',
+                success: function (json) {
+                    alert(json.emsg);
+                    if (json.ecode == 200) {
+                        window.location.href = '/Agent/Order/ListOrder';
+                    }
+                    $('#add_data').removeAttr('disabled').removeClass('disabled');
+                },
+                error: function () {
+                    alert('提交失败......');
+                    location.reload();
+                }
+            });
+           });
+
+    </script>
+    <{include file='Agent/Public/footer.html'}>
