@@ -16,6 +16,7 @@ final class BabyBoot extends Bootstrap_Abstract {
         $_Route = $dispatcher->getRouter();
         $iRoute = new \Yaf\Route\Rewrite('R00T/', array('module' => 'Admin', 'controller' => 'Login', 'action' => 'Index',), array());
         $_Route->addRoute('Admin_Route', $iRoute);
+
         $iRoute = new \Yaf\Route\Rewrite('User/', array('module' => 'Agent', 'controller' => 'Login', 'action' => 'Index',), array());
         $_Route->addRoute('Agent_Route', $iRoute);
     }
@@ -58,6 +59,7 @@ final class BabyBoot extends Bootstrap_Abstract {
     }
 
     private function Err($errno) {
+
         $url = '/';
         switch ($errno) {
             case YAF\ERR\NOTFOUND\CONTROLLER:

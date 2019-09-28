@@ -11,7 +11,7 @@ defined('ROOT') or define('ROOT', realpath(dirname(dirname(__FILE__))) . DIS);
 defined('APP_PATH') or define('APP_PATH', ROOT . 'Application' . DIS);
 defined('LIB_DIR') or define('LIB_DIR', APP_PATH . 'library' . DIS);
 defined('SMARTY_DIC') or define('SMARTY_DIC', LIB_DIR . 'Smarty' . DIS);
-defined('WEBNAME') or define('WEBNAME', 'Redua');
+defined('WEBNAME') or define('WEBNAME', '成绩查询');
 defined('DOM') or define('DOM', 'http://' . $_SERVER['SERVER_NAME']);
 defined('NOW') or define('NOW', time());
 defined('NOWS') or define('NOWS', strtotime(date('Y-m-d', NOW) . ' 00:00:00'));

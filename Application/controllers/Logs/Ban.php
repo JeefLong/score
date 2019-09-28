@@ -13,7 +13,7 @@ use DbModel;
 Final class BanController {
 
     // fail2ban
-    public static function Check($type, $count, $status) {
+    public static function Check($type, $count, $status = 1) {
         $guest_ip = Tool::getip();
         $mod = DbModel::Init();
         $cnt = $mod->table($type . '_log')

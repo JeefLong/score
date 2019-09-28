@@ -118,10 +118,10 @@ Final class LoginController extends BaseController {
         } elseif ($ret['status'] == 1) {
             self::$sess->__set('_agent_user', array(
                 'uid' => $ret['id'],
-                'uname' => $ret['real_name'],
+                'uname' => $ret['name'],
                 'passcount' => 0,
-                'umessage' => $ret['login_msg'],
-                'roleid' => $ret['role_id']
+                'umessage' => $ret['message'],
+                'class_id' => $ret['class_id']
                     )
             );
             if (self::$se_flag) {

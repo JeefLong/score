@@ -1,3 +1,4 @@
 ./Application/config/*
 ./Application/config/_Compile.d/*
 ./Application/config/_Cache.d/*
+./Application/plugins/*
